@@ -7,47 +7,39 @@ public class ArrayStorage {
     Resume[] storage = new Resume[10000];
 
     void clear() {
-        Arrays.fill(storage, null);
+        int storageSize = size();
+        Arrays.fill(storage, 0, storageSize, null);
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                break;
-            }
-        }
+        int storageSize = size();
+        storage[storageSize] = r;
     }
 
     Resume get(String uuid) {
-        int k = 0;
-        for (int i = 0; i < size(); i++) {
+        int storageSize = size();
+        for (int i = 0; i < storageSize; i++) {
             if (storage[i].toString().equals(uuid)) {
-                k = i;
-                break;
-            } else k = -1;
+                return storage[i];
+            }
         }
-
-        if (k != -1) {
-            return storage[k];
-        } else return null;
+        return null;
     }
 
     void delete(String uuid) {
-        int k = 0;
-        for (int i = 0; i < size(); i++) {
+        int storageSize = size();
+        int k = -1;
+        for (int i = 0; i < storageSize; i++) {
             if (storage[i].toString().equals(uuid)) {
                 k = i;
                 break;
-            } else {
-                k = -1;
             }
         }
-        if (k != -1) {
-            for (int j = k; j < size(); j++) {
+        if (k >= 0) {
+            for (int j = k; j < storageSize; j++) {
                 storage[j] = storage[j + 1];
-                storage[j + 1] = null;
             }
+            storage[storageSize] = null;
         } else System.out.println("Неверный uuid.");
     }
 
@@ -55,11 +47,12 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] newStorage = new Resume[size()];
-        for (int i = 0; i < size(); i++) {
-            newStorage[i] = storage[i];
+        int storageSize = size();
+        Resume[] resumes = new Resume[storageSize];
+        for (int i = 0; i < storageSize; i++) {
+            resumes[i] = storage[i];
         }
-        return newStorage;
+        return resumes;
     }
 
     int size() {
